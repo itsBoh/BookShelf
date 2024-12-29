@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		E1754A3A2D21B2890027D341 /* MySQLNIO in Frameworks */ = {isa = PBXBuildFile; productRef = E1754A392D21B2890027D341 /* MySQLNIO */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		E15E52752D2133C800993435 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1754A3A2D21B2890027D341 /* MySQLNIO in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = BookShelf;
 			packageProductDependencies = (
+				E1754A392D21B2890027D341 /* MySQLNIO */,
 			);
 			productName = BookShelf;
 			productReference = E15E52622D2133C700993435 /* BookShelf.app */;
@@ -195,6 +201,9 @@
 			);
 			mainGroup = E15E52592D2133C700993435;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				E1754A382D21B2890027D341 /* XCRemoteSwiftPackageReference "mysql-nio" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E15E52632D2133C700993435 /* Products */;
 			projectDirPath = "";
@@ -558,6 +567,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E1754A382D21B2890027D341 /* XCRemoteSwiftPackageReference "mysql-nio" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vapor/mysql-nio.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E1754A392D21B2890027D341 /* MySQLNIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E1754A382D21B2890027D341 /* XCRemoteSwiftPackageReference "mysql-nio" */;
+			productName = MySQLNIO;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E15E525A2D2133C700993435 /* Project object */;
 }
