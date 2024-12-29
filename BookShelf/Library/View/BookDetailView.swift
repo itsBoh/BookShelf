@@ -8,29 +8,53 @@
 import SwiftUI
 
 struct BookDetailView: View {
+    
     @Environment(\.dismiss) var dismiss
+    
+    let book: Book
     
     var body: some View {
         NavigationStack{
             ScrollView {
                 VStack {
-                    Rectangle()
-                        .fill(Color.blue)
-                        .frame(width: bookWidth(), height: bookHeight())
+                    if let url = URL(string: book.coverImage ?? "") {
+                        AsyncImage(url: url) { phase in
+                            switch phase {
+                            case .empty:
+                                ProgressView()
+                                    .frame(width: bookWidth(), height: bookHeight())
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: bookWidth(), height: bookHeight())
+                            case .failure:
+                                Image(systemName: "photo")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: bookWidth(), height: bookHeight())
+                            @unknown default:
+                                EmptyView()
+                            }
+                        }
+                        .padding(.bottom)
+                    }
                     
-                    Text("Title")
-                        .font(.largeTitle)
+                    
+                    Text(book.title)
+                        .font(.title2)
                         .fontWeight(.bold)
+                        .padding(.bottom)
                     
-                    Text("Author")
-                        .font(.title)
+                    Text(book.author)
+                        .font(.title3)
                     
-                    Text("publisher, year")
+                    Text("\(book.publisher), \(String(book.published ?? 0))")
                         .font(.caption)
                         .padding(.bottom)
                     
                     Button("Borrow") {}
-                            .buttonStyle(.borderedProminent)
+                        .buttonStyle(.borderedProminent)
                 }
                 .padding()
                 
@@ -41,15 +65,17 @@ struct BookDetailView: View {
                         .padding(.top, 10)
                         .padding(.horizontal)
                     
-                    Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
-                        .font(.body)
+                    Text(book.description ?? "No description available.")
+                        .font(.caption)
                         .padding(.horizontal)
                 }
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Dismiss") {
+                    Button{
                         dismiss()
+                    } label: {
+                        Image(systemName: "xmark.circle")
                     }
                 }
             }
@@ -57,7 +83,7 @@ struct BookDetailView: View {
     }
     
     func bookWidth() -> CGFloat {
-        return UIScreen.main.bounds.width / 2
+        return UIScreen.main.bounds.width / 4
     }
     
     func bookHeight() -> CGFloat {
@@ -65,6 +91,3 @@ struct BookDetailView: View {
     }
 }
 
-#Preview {
-    BookDetailView()
-}
