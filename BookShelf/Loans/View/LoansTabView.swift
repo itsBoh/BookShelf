@@ -10,8 +10,8 @@ import SwiftUI
 struct LoansTabView: View {
     
     @State var bookSheetView: Bool = false
-    
     @State var isLogInPresented: Bool = false
+    @State var isSignUpPresented: Bool = false
     
     @Binding var user: String
     @Binding var accountUserName: String
@@ -23,9 +23,14 @@ struct LoansTabView: View {
     var body: some View {
         NavigationStack{
             if(accountUserName.isEmpty || user == "book_reader"){
-                Button("Log In"){
-                    print("log :\(accountUserName)")
-                    isLogInPresented.toggle()
+                VStack {
+                    Button("Log In"){
+                        print("log :\(accountUserName)")
+                        isLogInPresented.toggle()
+                    }
+                    Button("Sign Up") {
+                        isSignUpPresented.toggle()
+                    }
                 }
             } else {
                 Button("Log Out"){
@@ -71,6 +76,9 @@ struct LoansTabView: View {
         .sheet(isPresented: $isLogInPresented){
             LogInView(user: $user, accountUserName: $accountUserName, sessionKey: $sessionKey)
         }
+        .sheet(isPresented: $isSignUpPresented) {
+            CreateUserAccountView()
+        }
     }
     
     func booksCoverWidth() -> CGFloat {
@@ -87,6 +95,7 @@ struct LoansTabView: View {
         sessionKey = ""
         viewModel.loans = []
     }
+    
     func daysUntilDueDate(_ dueDate: Date) -> Int {
         let calendar = Calendar.current
         let currentDate = Date()

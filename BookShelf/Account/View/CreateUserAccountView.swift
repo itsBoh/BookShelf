@@ -15,7 +15,7 @@ struct CreateUserAccountView: View {
     @State private var phoneNumber: String = ""
     @State private var password: String = ""
     
-    
+    @StateObject private var viewModel = CreateUserAccountViewModel()
     
     var body: some View {
         NavigationStack {
@@ -25,6 +25,7 @@ struct CreateUserAccountView: View {
                         Text("Name")
                         Spacer()
                         TextField("Enter your name", text: $name)
+                            .textInputAutocapitalization(.never)
                             .multilineTextAlignment(.trailing)
                     }
                     
@@ -32,13 +33,14 @@ struct CreateUserAccountView: View {
                         Text("Username")
                         Spacer()
                         TextField("Enter username", text: $username)
+                            .textInputAutocapitalization(.never)
                             .multilineTextAlignment(.trailing)
                     }
                     
                     HStack {
                         Text("Phone number")
                         Spacer()
-                        TextField("Enter phone number", text: $username)
+                        TextField("Enter phone number", text: $phoneNumber)
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                     }
@@ -47,6 +49,7 @@ struct CreateUserAccountView: View {
                         Text("Password")
                         Spacer()
                         SecureField("Enter your password", text: $password)
+                            .textInputAutocapitalization(.never)
                             .multilineTextAlignment(.trailing)
                     }
                 
@@ -59,7 +62,7 @@ struct CreateUserAccountView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Add") {
-                        print("add button pressed")
+                        viewModel.createUserAccount(name: name, username: username, phoneNumber: phoneNumber, password: password)
                     }
                 }
                 
@@ -69,10 +72,14 @@ struct CreateUserAccountView: View {
                     }
                 }
             }
+            .alert(item: $viewModel.errorMessage) { error in
+                Alert(title: Text("Error"), message: Text(error.message), dismissButton: .default(Text("OK")))
+            }
+            .onChange(of: viewModel.isUserCreated) { oldValue, isUserCreated in
+                if isUserCreated {
+                    dismiss()
+                }
+            }
         }
     }
-}
-
-#Preview {
-    CreateUserAccountView()
 }
