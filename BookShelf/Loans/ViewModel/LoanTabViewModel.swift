@@ -82,7 +82,7 @@ class LoansTabViewModel: ObservableObject {
         }
     }
     
-    func updateLoanStatus(loanId: String, returnDate: Date) {
+    func updateLoanStatus(loanId: String, bookId: String, returnDate: Date) {
         print("updateLoanStatus called with loanId: \(loanId) and returnDate: \(returnDate)")
         
         let eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
@@ -106,12 +106,16 @@ class LoansTabViewModel: ObservableObject {
             }
             
             let query = "UPDATE loans SET loanReturnDate = NOW() WHERE loanID = '\(loanId)'"
-            print("Executing query: \(query)")
             
             _ = try connection.query(query).wait()
             
-            fetchLoans()
+            let updateBookQuery = "UPDATE books SET bookAvailableCopies = bookAvailableCopies + 1 WHERE bookID = '\(bookId)'"
+                        print("Executing query: \(updateBookQuery)")
             
+                        _ = try connection.query(updateBookQuery).wait()
+            
+            fetchLoans()
+        
             print("Query executed successfully")
             
             

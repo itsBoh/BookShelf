@@ -31,7 +31,7 @@ struct BorrowedBooksView: View {
                         Button("Mark as Returned") {
                             print("tapped")
                             print("\(loan.id)")
-                            viewModel.updateLoanStatus(loanId: loan.id, returnDate: Date())
+                            viewModel.updateLoanStatus(loanId: loan.id, bookId: loan.bookId, returnDate: Date())
                             viewModel.fetchLoans()
                             
                             dismiss()
