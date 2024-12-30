@@ -45,7 +45,7 @@ BookShelfUITests/
 
 1. Clone the repository:
     ```sh
-   git clone https://github.com/yourusername/BookShelf.git
+   git clone https://github.com/itsBoh/BookShelf
     ```
 2. Open the project in Xcode:
     ```sh
