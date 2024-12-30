@@ -11,8 +11,11 @@ struct BookDetailView: View {
     
     @Environment(\.dismiss) var dismiss
     
-    @State var defaultsUserName: Bool = (UserDefaults.standard.string(forKey: "userName") == "reader_book" ? false : true)
-    @State var emtpyUserName: Bool = (UserDefaults.standard.string(forKey: "userName") == "" ? true : false)
+    @Binding var user: String
+    @Binding var accountUserName: String
+    @Binding var sessionKey: String
+    
+    @StateObject private var viewModel = BookDetailViewModel()
     
     let book: Book
     
@@ -56,9 +59,13 @@ struct BookDetailView: View {
                         .font(.caption)
                         .padding(.bottom)
                     
-                    Button("Borrow") {}
-                        .buttonStyle(.borderedProminent)
-                        .disabled(defaultsUserName || emtpyUserName || book.availableCopies == 0)
+                    Button("Borrow") {
+                        viewModel.borrowBook(book: book, accountUserName: accountUserName)
+                        dismiss()
+                        
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(user != "User" || book.availableCopies == 0)
                 }
                 .padding()
                 
@@ -85,6 +92,9 @@ struct BookDetailView: View {
                         Image(systemName: "xmark.circle")
                     }
                 }
+            }
+            .alert(item: $viewModel.errorMessage) { error in
+                Alert(title: Text("Error"), message: Text(error.message), dismissButton: .default(Text("OK")))
             }
         }
     }

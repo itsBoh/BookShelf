@@ -18,7 +18,7 @@ struct ContentView: View {
     
     var body: some View {
         TabView{
-            LibraryTabView()
+            LibraryTabView(user: $user, accountUserName: $accountUserName, sessionKey: $sessionKey)
                 .tabItem {
                     Label("Library", systemImage: "books.vertical")
                 }

@@ -44,7 +44,7 @@ class LoansTabViewModel: ObservableObject {
                 FROM loans
                 JOIN accounts ON loans.accountID = accounts.accountID
                 JOIN books ON loans.bookID = books.bookID
-                WHERE accounts.accountUserName = '\(userId)'
+                WHERE accounts.accountUserName = '\(userId)' AND loans.loanReturnDate IS NULL
                 """
             } else {
                 query = """

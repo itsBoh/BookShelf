@@ -12,6 +12,10 @@ struct LibraryTabView: View {
     
     @State private var selectedBook: Book?
     
+    @Binding var user: String
+    @Binding var accountUserName: String
+    @Binding var sessionKey: String
+    
     var body: some View {
         NavigationView {
             List(viewModel.filteredBooks) { book in
@@ -72,8 +76,10 @@ struct LibraryTabView: View {
             .onChange(of: viewModel.searchQuery){ oldValue, newValue in
                 viewModel.filterBooks()
             }
-            .sheet(item: $selectedBook) { book in
-                BookDetailView(book: book)
+            .sheet(item: $selectedBook, onDismiss: {
+                viewModel.fetchBooks()
+            }) { book in
+                BookDetailView(user: $user, accountUserName: $accountUserName, sessionKey: $sessionKey, book: book)
             }
         }
         .foregroundStyle(.primary)
