@@ -11,13 +11,16 @@ struct BookDetailView: View {
     
     @Environment(\.dismiss) var dismiss
     
+    @State var defaultsUserName: Bool = (UserDefaults.standard.string(forKey: "userName") == "reader_book" ? false : true)
+    @State var emtpyUserName: Bool = (UserDefaults.standard.string(forKey: "userName") == "" ? true : false)
+    
     let book: Book
     
     var body: some View {
         NavigationStack{
             ScrollView {
                 VStack {
-                    if let url = URL(string: book.coverImage ?? "") {
+                    if let url = URL(string: book.coverImage) {
                         AsyncImage(url: url) { phase in
                             switch phase {
                             case .empty:
@@ -49,26 +52,30 @@ struct BookDetailView: View {
                     Text(book.author)
                         .font(.title3)
                     
-                    Text("\(book.publisher), \(String(book.published ?? 0))")
+                    Text("\(book.publisher), \(String(book.published))")
                         .font(.caption)
                         .padding(.bottom)
                     
                     Button("Borrow") {}
                         .buttonStyle(.borderedProminent)
+                        .disabled(defaultsUserName || emtpyUserName || book.availableCopies == 0)
                 }
                 .padding()
                 
-                VStack(alignment: .leading) {
-                    Text("Description")
-                        .font(.body)
-                        .fontWeight(.bold)
-                        .padding(.top, 10)
-                        .padding(.horizontal)
-                    
-                    Text(book.description ?? "No description available.")
-                        .font(.caption)
-                        .padding(.horizontal)
+                HStack{
+                    VStack(alignment: .leading) {
+                        Text("Description")
+                            .font(.body)
+                            .fontWeight(.bold)
+                            .padding(.top, 10)
+                        
+                        Text(book.description)
+                            .font(.caption)
+                    }
+                    .padding(.horizontal)
+                    Spacer()
                 }
+                .frame(width: UIScreen.main.bounds.width)
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -88,6 +95,10 @@ struct BookDetailView: View {
     
     func bookHeight() -> CGFloat {
         return bookWidth() * 4 / 3
+    }
+    
+    private func checkCanBorrow() {
+        
     }
 }
 

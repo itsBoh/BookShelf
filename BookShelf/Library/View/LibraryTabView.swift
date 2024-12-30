@@ -14,12 +14,12 @@ struct LibraryTabView: View {
     
     var body: some View {
         NavigationView {
-            List(viewModel.books) { book in
+            List(viewModel.filteredBooks) { book in
                 Button {
                     selectedBook = book
                 }label: {
                     HStack{
-                        if let url = URL(string: book.coverImage ?? "") {
+                        if let url = URL(string: book.coverImage) {
                             AsyncImage(url: url) { phase in
                                 switch phase {
                                 case .empty:
@@ -49,31 +49,32 @@ struct LibraryTabView: View {
                                 .font(.title3)
                             Text("Publisher: \(book.publisher)")
                                 .font(.footnote)
-                            if let published = book.published {
-                                Text("Published: \(String(published))")
-                                    .font(.footnote)
-                            }
-                            if let availableCopies = book.availableCopies {
-                                Text("Available Copies: \(availableCopies)")
-                                    .font(.footnote)
-                            }
+                            Text("Published: \(String(book.published))")
+                                .font(.footnote)
+                            
+                            Text("Available Copies: \(book.availableCopies)")
+                                .font(.footnote)
+                            
                         }
                         .frame(maxHeight: UIScreen.main.bounds.height / 8)
                         .padding(.leading, 12)
-                        
+                        Spacer()
                         Image(systemName: "chevron.right")
                             .foregroundStyle(.secondary)
                     }
                 }
-                
             }
             .navigationTitle("Library")
+            .searchable(text: $viewModel.searchQuery)
             .onAppear {
                 viewModel.fetchBooks()
             }
+            .onChange(of: viewModel.searchQuery){ oldValue, newValue in
+                viewModel.filterBooks()
+            }
             .sheet(item: $selectedBook) { book in
-                            BookDetailView(book: book)
-                        }
+                BookDetailView(book: book)
+            }
         }
         .foregroundStyle(.primary)
     }

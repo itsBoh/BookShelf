@@ -8,12 +8,12 @@
 import Foundation
 
 struct Book: Identifiable {
-    let id: UUID
-    let title: String
-    let author: String
-    let description: String?
-    let publisher: String
-    let published: Int?
-    let coverImage: String?
-    let availableCopies: Int?
+    var id: String
+    var title: String
+    var author: String
+    var description: String
+    var publisher: String
+    var published: Int
+    var coverImage: String
+    var availableCopies: Int
 }
